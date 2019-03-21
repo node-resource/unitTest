@@ -1,0 +1,112 @@
+@define-extend inline_block {
+  display:inline-block;
+}
+
+
+/*****  margin *******/
+/* 单方向偏离 */
+@define-mixin single_margin $dir,$val {
+  .ma-$(dir)-$(val) {
+    margin-$(dir): $(val)px;
+  }
+}
+
+/* 双向偏离 */
+@define-mixin symmetric_margin $ver,$hor {
+  .ma-$(ver)-$(hor) {
+    margin: $(ver)px $(hor)px;
+  }
+}
+/* 三向偏离 */
+@define-mixin three_margin $left,$ver,$right {
+  .ma-$(left)-$(ver)-$(right) {
+    margin: $(left)px $(ver)px $(right)px;
+  }
+}
+/* 四向偏离 */
+@define-mixin all_margin $top,$right,$bottom,$left {
+  .ma-$(top)-$(right)-$(bottom)-$(left) {
+    margin: $(top)px $(right)px $(bottom)px $(left)px;
+  }
+}
+
+@mixin single_margin top,10;
+@mixin single_margin right,10;
+@mixin single_margin bottom,10;
+@mixin single_margin left,10;
+@mixin single_margin left,20;
+
+@mixin symmetric_margin 10,20;
+
+@mixin three_margin 10,20,30;
+
+@mixin all_margin 10,20,30,40;
+
+
+
+/*****  padding *******/
+/* 单方向偏离 */
+@define-mixin single_padding $dir,$val {
+  .pa-$(dir)-$(val) {
+    padding-$(dir): $(val)px;
+  }
+}
+
+/* 双向偏离 */
+@define-mixin symmetric_padding $ver,$hor {
+  .pa-$(ver)-$(hor) {
+    padding: $(ver)px $(hor)px;
+  }
+}
+/* 三向偏离 */
+@define-mixin three_padding $left,$ver,$right {
+  .pa-$(left)-$(ver)-$(right) {
+    padding: $(left)px $(ver)px $(right)px;
+  }
+}
+/* 四向偏离 */
+@define-mixin all_padding $top,$right,$bottom,$left {
+  .pa-$(top)-$(right)-$(bottom)-$(left) {
+    padding: $(top)px $(right)px $(bottom)px $(left)px;
+  }
+}
+
+@mixin single_padding top,10;
+@mixin single_padding right,10;
+@mixin single_padding bottom,10;
+@mixin single_padding left,10;
+@mixin single_padding left,20;
+
+@mixin symmetric_padding 10,20;
+
+@mixin three_padding 10,20,30;
+
+@mixin all_padding 10,20,30,40;
+
+
+
+
+/*****  尺寸  *******/
+@define-mixin width $size {
+  .w$(size) {
+    @extend inline_block;
+    width: $(size)px;
+  }
+}
+@define-mixin height $size {
+  .h$(size) {
+    @extend inline_block;
+    height: $(size)px;
+  }
+}
+@define-mixin square $size {
+  .square$(size) {
+    @extend inline_block;
+    width: $(size)px;
+    height: $(size)px;
+  }
+}
+
+@mixin width 120;
+@mixin height 100;
+@mixin square 100;

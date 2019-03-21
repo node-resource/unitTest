@@ -1,0 +1,30 @@
+/*****  背景/图标  *******/
+@define-extend bg_icon {
+  width: 25px;
+  height:25px;
+  display:inline-block;
+  background-position: center center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+@define-mixin bg_color $type,$color {
+  .bg-$(type) {
+    background-color: $(color) !important;
+  }
+}
+
+/* 图标列表 */
+$iconlist:back, cart, mil, person, phone, share, close;
+@each $icon in ($iconlist){ 
+  .icon-$(icon) { 
+    @extend bg_icon;
+    background-image: url('../image/icons/$(icon).png'); 
+  } 
+}
+
+@mixin bg_color dark,var(--color-dark);
+@mixin bg_color info,var(--color-info);
+@mixin bg_color warning,var(--color-warning);
+@mixin bg_color danger,var(--color-danger);
+@mixin bg_color success,var(--color-success);
+

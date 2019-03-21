@@ -1,0 +1,19 @@
+@define-extend font_base {
+  font-size: var(--font-12);
+  cursor: pointer;
+  margin-left: 10px;
+  line-height: 1;
+}
+
+@define-mixin font_type $type,$color {
+  .font-$(type) {
+    @extend font_base;
+    color: $(color);
+  }
+}
+
+@mixin font_type disable,var(--color-light);
+@mixin font_type info,var(--color-info);
+@mixin font_type warning,var(--color-warning);
+@mixin font_type danger,var(--color-danger);
+@mixin font_type success,var(--color-success);

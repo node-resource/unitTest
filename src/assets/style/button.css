@@ -1,0 +1,39 @@
+@define-extend rounded_button { 
+  display: inline-block;
+  border-radius:4px;
+  padding:5px 10px;
+  cursor: pointer;
+  margin-left: 10px;
+  color:var(--color-base);
+}
+
+/* 背景色 */
+@define-mixin bg_button $type,$color {
+  .btn-$(type) {
+    @extend rounded_button;
+    background-color: $color;
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+/* 尺寸 */
+@define-mixin size_button $type {
+  .btn-$(type) {
+    @mixin-content;
+  }
+}
+
+@mixin bg_button disable, var(--color-light);
+@mixin bg_button info, var(--color-info);
+@mixin bg_button warning, var(--color-warning);
+@mixin bg_button danger, var(--color-danger);
+@mixin bg_button success, var(--color-success);
+
+
+@mixin size_button mini {
+  padding:2px 5px;
+}
+@mixin size_button large {
+  padding:10px 15px;
+}
