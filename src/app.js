@@ -44,6 +44,7 @@ class App extends React.Component {
     super(props)
   }
   render () {
+     {/* 在这里写注释 */}
     return Root
   }
 }

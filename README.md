@@ -14,6 +14,39 @@ webpack + react + redux + react-router + postcss + typescript + 单元测试 + g
 - state改变 -> shouldComponentUpdate() -> componentWillUpdate() -> render() -> componentDidUpdate()
 - 组件销毁-> componentWillUnmount() -> 结束
 
+## setState
+  setState 的调用是`异步`的——不要紧接在调用 setState 之后，依赖 `this.state `来反射新值。
+
+``` javascript
+  incrementCount() {
+    // Note: this will *not* work as intended.
+    this.setState({count: this.state.count + 1});
+  }
+
+  handleSomething() {
+    // Let's say `this.state.count` starts at 0.
+    this.incrementCount();
+    this.incrementCount();
+    this.incrementCount();
+  }
+```
+  如果你需要`基于当前状态计算值`，则传递一个更新函数而不是一个对象
+``` javascript
+  incrementCount() {
+    this.setState((state) => {
+      // Important: read `state` instead of `this.state` when updating.
+      return {count: state.count + 1}
+    });
+  }
+
+  handleSomething() {
+    // Let's say `this.state.count` starts at 0.
+    this.incrementCount();
+    this.incrementCount();
+    this.incrementCount();
+  }
+```
+
 
 ## babel 转移 JSX
 babel 转译器会把 JSX 转换成一个名为 `React.createElement()` 的方法调用。下边方式效果是一样的。
@@ -77,8 +110,12 @@ constructor(props) {
   }
 ```
 - 在回调函数中使用 箭头函数 (不推荐)
+ps: 会在每次组件渲染时创建一个新的函数，可能会影响性能.
 ``` javascript
  <button onClick={(e) => this.handleClick(e)}>
+    Click me
+  </button>
+  <button onClick={this.handleClick.bind(this)}>
     Click me
   </button>
 ```
@@ -87,11 +124,119 @@ constructor(props) {
   <!-- 以下2种方法是等价的 -->
   <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
   <button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
+  <!-- 通过data-属性传递参数 -->
+  <button onClick={this.deleteRow} data-id={id}>Delete Row</button>
 ```
 注意：***很重要**
 - `参数 e 作为 React 事件对象将会被作为第二个参数进行传递。`
 - `通过箭头函数的方式，事件对象必须显式的进行传递`
 - `通过 bind 的方式，事件对象以及更多的参数将会被隐式的进行传递`
+
+### 为什么绑定是必须的
+先来看一个例子
+``` javascript
+  var obj = {
+    name: 'test',
+    say: function(){ console.log(this.name) }
+  }
+  var method = obj.say
+
+  method() // undefined
+  method.call(obj) // test
+  method.apply(obj) //test
+  method.bind(obj)() // test
+```
+
+### 怎样阻止函数被调用太快或者太多次
+如果你有一个onClick或者onScroll这样的事件处理器，想要阻止回调被触发的太快，那么可以限制执行回调的速度，可以通过以下几种方式做到这点:
+- 节流
+基于时间的频率来进行抽样更改 (例如 _.throttle)
+- 防抖
+一段时间的不活动之后发布更改 (例如 _.debounce)
+- requestAnimationFrame节流
+基于requestAnimationFrame的抽样更改 (例如 raf-schd)
+  注意：`_.debounce` , `_.throttle`和`raf-schd` 都提供了一个 `cancel`方法来取消延迟回调。 所以在`componentWillUnmount`生命周期里要调用`cancel`来取消延迟回调。
+
+#### 节流
+通过控制函数调用的频率(多长时间执行一次)。下面这个例子会节流“click”事件处理器每秒钟的只能调用一次
+``` javascript
+  import throttle from 'lodash.throttle'
+  class Loadmore extends React.Component {
+    constructor (props) {
+      super(props)
+      this.handleClickThrottled = throttle(this.handleClick, 1000)
+    },
+    handleClick = () => {
+      this.props.loadmore()
+    }
+    componentWillUnmount () {
+      this.handleClickThrottled.cancel()
+    }
+    render () {
+      return (
+        <button onClick={this.handleClickThrottled}>Load More</button>
+      )
+    }
+  }
+```
+
+#### 防抖
+防抖确保函数在上一次执行结束后的一段约定时间内（多久时间后再执行下一次），不会被再次执行。以250ms的延迟来改变文本输入：
+``` javascript
+  import debounce from 'lodash.debounce'
+  class Searchbox extends React.Component {
+    constructor (props) {
+      super(props)
+      this.handleChangeDebounce = debouce(this.hanldeChange, 250)
+    }
+    handleChange = (e) => {
+      this.props.onChange(e.target.value)
+    }
+    componentWillUnmount () {
+      this.handleChangeDebounce.cancel()
+    }
+    render () {
+      return (
+        <input
+          type="text"
+          onChange={this.handleChangeDebounce}
+          placeholder="Search..."
+          defaultValue={this.props.value}
+        />
+      )
+    }
+  }
+```
+#### requestAnimationFrame节流
+`requestAnimationFrame`是在浏览器中排队等待执行的一种方法，它可以在呈现性能的最佳时间执行。一个函数被requestAnimationFrame放入队列后将会在下一帧触发
+``` javascript
+  import rafSchedule from 'raf-schd'
+  class ScrollListener extends React.Component {
+    constructor (props) {
+      super(props)
+      this.scheduleUpdate = rafSchedule(
+        point => this.props.onScroll(point)
+      )
+    }
+    componentWillUnmount () {
+      this.scheduleUpdate.cancel()
+    }
+    handleScroll = (e) => {
+      this.scheduleUpdate({x:e.clientX, y: e.clientY})
+    },
+    render () {
+      return (
+        <div
+          style={{ overflow: 'scroll' }}
+          onScroll={this.handleScroll}>
+          <img src="/my-huge-image.jpg" />
+        </div>
+      )
+    }
+  }
+```
+
+
 
 
 ## 状态提升
