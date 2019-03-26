@@ -87,26 +87,27 @@
 
 
 /*****  尺寸  *******/
-@define-mixin width $size {
-  .w$(size) {
+$widthlist: 50,100;
+@each $width in ($widthlist){ 
+  .w$(width) { 
     @extend inline_block;
-    width: $(size)px;
-  }
-}
-@define-mixin height $size {
-  .h$(size) {
-    @extend inline_block;
-    height: $(size)px;
-  }
-}
-@define-mixin square $size {
-  .square$(size) {
-    @extend inline_block;
-    width: $(size)px;
-    height: $(size)px;
-  }
+    width: $(width)px;
+  } 
 }
 
-@mixin width 120;
-@mixin height 100;
-@mixin square 100;
+$heightlist: 50,100;
+@each $height in ($heightlist){ 
+  .h$(height) { 
+    @extend inline_block;
+    height: $(height)px;
+  } 
+}
+
+$squarelist: 50,100, 200, 400;
+@each $square in ($squarelist){ 
+  .square$(square) { 
+    @extend inline_block;
+    width: $(square)px;
+    height: $(square)px;
+  } 
+}
