@@ -21,6 +21,10 @@ const Portal = Loadable({
   loader: () => import('@/modules/portals'),
   loading: Loading
 })
+const Opt = Loadable({
+  loader: () => import('@/modules/throttle_debounce'),
+  loading: Loading
+})
 import {HOC} from '@/modules/fragment/hoc'
 import {Magnifier} from '@/modules/magnifier'
 
@@ -28,11 +32,12 @@ import {Magnifier} from '@/modules/magnifier'
 const usePortal = false
 const Root = !usePortal ? (<Router>
                               <Switch>
+                                <Route exact path="/" component={Opt}/>
                                 <Route exact path="/chess" component={Chess}/>
                                 <Route path="/life" component={Life}/>
                                 <Route path="/autoFocus" component={AutoFocus}/>
                                 <Route path="/hoc" component={HOC}/>
-                                <Route path="/" component={Magnifier}/>
+                                <Route path="/magnifier" component={Magnifier}/>
                               </Switch>
                             </Router>) : (<Portal/>)
 
