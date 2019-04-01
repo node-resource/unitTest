@@ -1,5 +1,5 @@
 ## 技术栈
-webpack + react + redux + react-router + postcss + typescript + 单元测试 + git
+webpack + react + antd + redux + react-router-dom + postcss + typescript + 单元测试 + git 
 
 ## 生命周期
 1、组件运行之前

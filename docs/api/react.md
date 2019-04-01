@@ -1,4 +1,5 @@
 # React API
+  ![参考地址](https://reacttraining.com/react-router/web/guides/dealing-with-update-blocking)
 
 ## Creating React Component
 - React.Component

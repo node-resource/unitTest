@@ -5,9 +5,11 @@ import { DatePicker } from 'antd'
 // import 'antd/dist/antd.css';
 import '@/assets/style/common.css'
 
-import App from './app'
+// import App from './app'
+// import NestRouter from './demo/router/nested'
+import SPA from './root'
 
 ReactDom.render(
-  <App/>,
+  <SPA />,
   document.getElementById('app')
 )

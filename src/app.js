@@ -1,6 +1,6 @@
 import React from 'react'
 import Loadable from 'react-loadable'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 const Loading = () => (<div>Loading...</div>)
@@ -31,14 +31,22 @@ import {Magnifier} from '@/modules/magnifier'
 
 const usePortal = false
 const Root = !usePortal ? (<Router>
-                              <Switch>
-                                <Route exact path="/" component={Opt}/>
-                                <Route exact path="/chess" component={Chess}/>
-                                <Route path="/life" component={Life}/>
-                                <Route path="/autoFocus" component={AutoFocus}/>
-                                <Route path="/hoc" component={HOC}/>
-                                <Route path="/magnifier" component={Magnifier}/>
-                              </Switch>
+                              <nav>
+                                <ul>
+                                  <li><Link to={{ pathname: "/opt", search: "?name=netflix">opt</Link></li>
+                                  <li><Link to="/chess">chess</Link></li>
+                                  <li><Link to="/life">life</Link></li>
+                                  <li><Link to="/autoFocus">autoFocus</Link></li>
+                                  <li><Link to="/hoc">hoc</Link></li>
+                                  <li><Link to="/magnifier">magnifier</Link></li>
+                                </ul>
+                              </nav>
+                              <Route exact path="/opt" component={Opt}/>
+                              <Route path="/chess" component={Chess}/>
+                              <Route path="/life" component={Life}/>
+                              <Route path="/autoFocus" component={AutoFocus}/>
+                              <Route path="/hoc" component={HOC}/>
+                              <Route path="/magnifier" component={Magnifier}/>
                             </Router>) : (<Portal/>)
 
 
